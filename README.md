@@ -1,3 +1,11 @@
+Author: Adan Mora-Fallas
+
+This is a version of the mini NN framework created by Jose Carranza-Rojas to add tanh as an activation function and MSE as loss function. 
+
+This work is presented as an assignment for the course Machine Learning, Master in Computer Science, Costa Rica Institute of Technology.
+
+--------------------------------------------------------------------------------------------------------
+
 A Neural Network (nn) from scratch!
 Author: Jose Carranza-Rojas
 
