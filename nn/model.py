@@ -4,7 +4,7 @@ from nn.dense import dense
 import numpy as np
 
 class model():
-    def __init__(self, input_size, output_size, hidden_shapes, func_acti, func_acti_grad, has_dropout=True, dropout_perc=0.5):
+    def __init__(self, input_size, output_size, hidden_shapes, func_acti, func_acti_grad, loss_func, loss_func_grad, is_regression=False, has_dropout=True, dropout_perc=0.5):
         assert(len(hidden_shapes) > 0), "NN must have at least 1 hidden layer!"
         self.input_size = input_size
         self.output_size = output_size
@@ -13,15 +13,16 @@ class model():
         self.hidden_layers = []
         self.has_dropout = has_dropout
         self.dropout_perc = dropout_perc
-        self.populate_layers(func_acti, func_acti_grad)
+        self.populate_layers(func_acti, func_acti_grad, loss_func, loss_func_grad, is_regression)
 
 
-    def populate_layers(self, func_acti, func_acti_grad):
+    def populate_layers(self, func_acti, func_acti_grad, loss_func, loss_func_grad, is_regression):
         i_size = self.input_size
         for i in range(0, self.hidden_amount):
             self.hidden_layers.append(dense(i_size, self.hidden_shapes[i], func_acti, func_acti_grad))
             i_size = self.hidden_shapes[i]
-        self.loss_layer = loss_layer(i_size, self.output_size)
+        # print(i_size, self.output_size)
+        self.loss_layer = loss_layer(i_size, self.output_size, loss_func, loss_func_grad, is_regression)
 
     def forward(self, x, y, train=True):
         self.dropout_masks = []
@@ -35,7 +36,7 @@ class model():
 
         o = self.loss_layer.forward(data)
         loss = self.loss_layer.loss(y)
-        #print(loss, o)
+        # print('Loss and O  ', loss, o)
         return o, loss
 
     def predict(self, x):
